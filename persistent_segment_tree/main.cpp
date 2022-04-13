@@ -40,3 +40,9 @@ int update(int pos, int x, int i, int Lx=0, int Rx=m)
     else rc[nw] = update(pos, x, rc[i], m, Rx);
     return nw;
 }
+
+void build(int n)
+{
+    m=1;
+    while(m<n) m<<=1;
+}

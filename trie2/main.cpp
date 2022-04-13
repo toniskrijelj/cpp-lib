@@ -14,30 +14,52 @@ struct trie_struct
         return mp[i];
     }
 };
-trie_struct tr[mxN*31];
-int a[mxN];
+const int bits=17;
+trie_struct tr[mxN*bits];
 
+int a[mxN];
 int sz = 1;
-void add(int x, int t = 0)
+void insert(int x, int t = 0)
 {
-    for(int bit = 0; bit < 30; bit++)
+    for(int bit = 0; bit < bits; bit++)
     {
-        bool b = x&(1<<(30-1-bit));
-        if(tr[t][b]==-1) tr[t][b] = sz++;
+        bool b = x&(1<<(bits-1-bit));
+        if(tr[t][b]==-1) tr[t][b] = sz++, tr[tr[t][b]].clear();
         t = tr[t][b];
     }
 }
-int find(int x, int t = 0)
+void reset()
 {
-    ll ans = 0;
-    for(int bit = 0; bit < 30; bit++)
+    sz=1;
+    tr[0].clear();
+}
+int mn(int x, int t = 0)
+{
+    int ans = 0;
+    for(int bit = 0; bit < bits; bit++)
     {
-        bool b = x&(1<<(30-1-bit));
-        if(tr[t][b]!=-1) t = tr[t][b];
+        bool b = x&(1<<(bits-1-bit));
+        if(tr[t][b]==-1)
+        {
+            ans += 1<<(bits-1-bit);
+            t = tr[t][!b];
+        }
+    }
+}
+int mx(int x, int t = 0)
+{
+    int ans = 0;
+    for(int bit = 0; bit < bits; bit++)
+    {
+        bool b = !(x&(1<<(bits-1-bit)));
+        if(tr[t][b]==-1)
+        {
+            t = tr[t][!b];
+        }
         else
         {
-            ans += 1<<(30-1-bit);
-            t = tr[t][!b];
+            ans += 1<<(bits-1-bit);
+            t = tr[t][b];
         }
     }
     return ans;

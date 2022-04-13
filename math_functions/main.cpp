@@ -78,5 +78,8 @@ mt19937 mt_rand(chrono::high_resolution_clock::now().time_since_epoch().count())
 
 v.erase(unique(v.begin(), v.end()), v.end());
 
+double st=clock();
+while ((clock()-st)/CLOCKS_PER_SEC<3.5)
+
 FILE* f1 = fopen("C:\\Users\\toni\\Desktop\\2019-2020-sio1-problems\\03_smestaj\\testcases\\50.out", "r");
 FILE* f2 = fopen("C:\\Users\\toni\\Desktop\\2019-2020-sio1-problems\\03_smestaj\\testcases\\50a.out", "r");

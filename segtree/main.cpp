@@ -43,6 +43,19 @@ void add(int l, int r, ll v, int i=0, int Lx=0, int Rx=sz)
     add(l, r, v, i*2+2, m, Rx);
     recalc(i, Lx, Rx);
 }
+void SET(int pos, int v, int i=0, int Lx=0, int Rx=sz)
+{
+    if(Rx-Lx==1)
+    {
+        mn[i]=v;
+        return;
+    }
+    lazy(i);
+    int m = (Rx+Lx)/2;
+    if(pos<m) SET(pos,v,i*2+1,Lx,m);
+    else SET(pos,v,i*2+2,m,Rx);
+    recalc(i);
+}
 ll qry(int l, int r, int i=0, int Lx=0, int Rx=sz)
 {
     if(Rx <= l || Lx >= r) return 1e9;
