@@ -40,7 +40,7 @@ int setup(int n)
     }
     for(int i = 1; i <= comps; i++)
     {
-        sort(outc[i].begin(), outc[i].end());
+        sort(outc[i].begin(), outc[i].end()); ///ovo bi mogao speedup
         sort(inc[i].begin(), inc[i].end());
         outc[i].erase(unique(outc[i].begin(), outc[i].end()), outc[i].end());
         inc[i].erase(unique(inc[i].begin(), inc[i].end()), inc[i].end());

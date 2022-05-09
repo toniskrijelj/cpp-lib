@@ -77,3 +77,33 @@ vector<int> LCP(string t, vector<int>& p)
     }
     return lcp;
 }
+void KMP(string &s, vector<int> &kmp)
+{
+    kmp=vector<int>(s.size(), 0);
+    for(int i=1; i<(int)s.size(); i++)
+    {
+        int t=kmp[i-1];
+        while(t)
+        {
+            if(s[t]==s[i]) break;
+            t=kmp[t-1];
+        }
+        if(s[t]==s[i]) t++;
+        kmp[i]=t;
+    }
+}
+void Z(string &s, vector<int> &z)
+{
+    z=vector<int>(s.size(), 0);
+    int r=0, l=0;
+    for(int i=1; i<(int)s.size(); i++)
+    {
+        if(i<r) z[i]=min(z[i-l], r-i);
+        while(s[z[i]]==s[z[i]+i]) z[i]++;
+        if(i+z[i]>r)
+        {
+            r=i+z[i];
+            l=i;
+        }
+    }
+}

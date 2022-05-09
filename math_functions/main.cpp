@@ -68,10 +68,10 @@ vector<int> pf(int x)
     return ans;
 }
 
-f[0] = 1;
-for(int i = 1; i < mxN; i++) f[i]=f[i-1]*i%mod;
-finv[mxN-1]=inv(f[mxN-1]);
-for(int i = mxN-2; i >= 0; i--) finv[i]=finv[i+1]*(i+1)%mod;
+    f[0]=1;
+    for(int i=1; i<mxN; i++) f[i]=f[i-1]*i%mod;
+    finv[mxN-1]=inv(f[mxN-1]);
+    for(int i=mxN-2; i>=0; i--) finv[i]=finv[i+1]*(i+1)%mod;
 
 
 mt19937 mt_rand(chrono::high_resolution_clock::now().time_since_epoch().count());
@@ -83,3 +83,7 @@ while ((clock()-st)/CLOCKS_PER_SEC<3.5)
 
 FILE* f1 = fopen("C:\\Users\\toni\\Desktop\\2019-2020-sio1-problems\\03_smestaj\\testcases\\50.out", "r");
 FILE* f2 = fopen("C:\\Users\\toni\\Desktop\\2019-2020-sio1-problems\\03_smestaj\\testcases\\50a.out", "r");
+
+
+
+#pragma GCC target("popcnt")

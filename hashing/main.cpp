@@ -20,7 +20,7 @@ const ll hshmod[HASH_SIZE] = {(ll)1e9+7, (ll)1e9+9};
 const ll hshbase[HASH_SIZE] = {31, 29};
 ll basepow[HASH_SIZE][mxN];
 ll baseinv[HASH_SIZE][mxN];
-ll hsh[HASH_SIZE][mxK][mxN]; ///setable hash size
+ll hsh[HASH_SIZE][mxK][mxN];
 void precalc()
 {
     for(int i = 0; i < HASH_SIZE; i++)
@@ -37,13 +37,6 @@ void precalc()
     }
 
 }
-/*
-ll calc_hsh(int base, int l, int r) ///base 1 indexing
-{
-    return (hsh[base][r]-hsh[base][l-1]+hshmod[base])%hshmod[base]
-            *baseinv[base][l-1]%hshmod[base]; ///shift to left
-}
-*/
 ll calc_hsh(int base, int j, int l, int r) ///base 1 indexing
 {
     return (hsh[base][j][r]-hsh[base][j][l-1]+hshmod[base])%hshmod[base]
@@ -54,11 +47,22 @@ void do_hash(int j, string& s) ///delete J if  doesnt exist
     int n = s.size();
     for(int base = 0; base < HASH_SIZE; base++)
     {
-        for(int i = 1; i < n; i++)
+        for(int i = 1; i <= n; i++)
         {
-            hsh[base][j][i] = hsh[base][j][i-1];
-            ///hash function
-
+            hsh[base][j][i]=(hsh[base][j][i-1]+(s[i-1]-'a'+1)*basepow[base][i-1])%hshmod[base];
         }
+    }
+}
+void do_hash(int j, string& s) ///1 base indexing
+{
+    int n = s.size();
+    for(int base = 0; base < HASH_SIZE; base++)
+    {
+        for(int i = 1; i <= n; i++)
+        {
+            hsh[base][j][i]=(hsh[base][j][i-1]+(s[i-1]-'A'+1)*basepow[base][i-1])%hshmod[base];
+            //cout << hsh[base][j][i] << " ";
+        }
+        //cout << "\n";
     }
 }

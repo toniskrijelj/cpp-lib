@@ -1,4 +1,22 @@
 
+struct edge
+{
+    int u,v;
+    int other(int i)
+    {
+        return i^u^v;
+    }
+};
+edge es[mxN];
+void dfs(int i, int p=0, int d=0, int pedg=-1)
+{
+    up[0][i]=p, down[i]=d, in[i] = timer_++;
+    if(p) pe[i]=pedg;
+    for(int j = 1; j < mxlogN; j++) up[j][i]=up[j-1][up[j-1][i]];
+    for(int e : adj[i]) if(es[e].other(i)!=p) dfs(es[e].other(i), i, d+1, e);
+    out[i] = timer_;
+}
+
 vector<int> adj[mxN];
 int up[mxlogN][mxN], down[mxN], in[mxN], out[mxN], timer_;
 int a[mxN];
