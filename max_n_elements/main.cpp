@@ -10,7 +10,6 @@ void setup()
 }
 void add(ll x)
 {
-    x = -x;
     ms.insert(x);
     if(can==0) return;
     if(did==0)
@@ -43,7 +42,6 @@ void add(ll x)
 }
 void rem(ll x)
 {
-    x = -x;
     auto jt = ms.find(x);
     if(did==0)
     {
