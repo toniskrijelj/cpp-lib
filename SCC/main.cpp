@@ -22,26 +22,36 @@ vector<int> inc[mxN];
 vector<int> outc[mxN];
 int setup(int n)
 {
-    for(int i = 1; i <= n; i++) dfs(i);
+    for(int i=1; i<=n; i++) dfs(i);
     reverse(order.begin(), order.end());
-    int comps = 0;
-    for(int i : order)
+    int comps=0;
+    for(int i:order)
     {
         if(root[i]) continue;
         assign(i, ++comps);
     }
-    for(int i = 1; i <= n; i++)
+    for(int c=1; c<=comps; c++)
     {
-        for(int j : out[i])
+        for(int i:who[c])
         {
-            if(root[i]!=root[j]) outc[root[i]].push_back(root[j]);
-            if(root[i]!=root[j]) inc[root[j]].push_back(root[i]);
+            for(int j:out[i])
+            {
+                if(root[i]!=root[j])
+                {
+                    inc[root[j]].push_back(root[i]);
+                }
+            }
+            for(int j:in[i])
+            {
+                if(root[i]!=root[j])
+                {
+                    outc[root[j]].push_back(root[i]);
+                }
+            }
         }
     }
-    for(int i = 1; i <= comps; i++)
+    for(int i=1; i<=comps; i++)
     {
-        sort(outc[i].begin(), outc[i].end()); ///ovo bi mogao speedup
-        sort(inc[i].begin(), inc[i].end());
         outc[i].erase(unique(outc[i].begin(), outc[i].end()), outc[i].end());
         inc[i].erase(unique(inc[i].begin(), inc[i].end()), inc[i].end());
     }
