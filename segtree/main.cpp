@@ -17,7 +17,7 @@ void build2(int n, int i=0, int Lx=0, int Rx=sz)
     int m = (Lx+Rx)/2;
     build2(n, i*2+1, Lx, m);
     build2(n, i*2+2, m, Rx);
-    recalc(i);
+    recalc(i, Lx, Rx);
 }
 void build(int n)
 {
@@ -50,24 +50,24 @@ void SET(int pos, int v, int i=0, int Lx=0, int Rx=sz)
         mn[i]=v;
         return;
     }
-    lazy(i);
+    lazy(i, Lx, Rx);
     int m = (Rx+Lx)/2;
     if(pos<m) SET(pos,v,i*2+1,Lx,m);
     else SET(pos,v,i*2+2,m,Rx);
-    recalc(i);
+    recalc(i, Lx, Rx);
 }
 ll qry(int l, int r, int i=0, int Lx=0, int Rx=sz)
 {
     if(Rx <= l || Lx >= r) return 1e9;
     if(Lx >= l && Rx <= r) return 0;
-    lazy(i);
+    lazy(i, Lx, Rx);
     int m = (Rx+Lx)/2;
     return qry(l,r,i*2+1,Lx,m), qry(l,r,i*2+2,m,Rx);
 }
 ll qry(int pos, int i=0, int Lx=0, int Rx=sz)
 {
     if(Rx-Lx==1) return ;
-    lazy(i);
+    lazy(i, Lx, Rx);
     int m = (Rx+Lx)/2;
     if(pos<m) return +qry(pos,i*2+1,Lx,m);
     else return +qry(pos,i*2+2,m,Rx);

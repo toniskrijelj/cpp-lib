@@ -1,27 +1,30 @@
-#include <bits/stdc++.h>
-#include <iostream>
-using namespace std;
-
-typedef long long ll;
-typedef unsigned long long ull;
-
-const int mxN = 2005;
-const int mxK = 26;
-
-
-int main()
+struct edge
 {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-
-    int t; cin >> t;
-    while(t--)
+    int u, v, root;
+    int other(int i)
     {
-        int a, b; cin >> a >> b;
-        if((a+b)%3 == 0 && min(a,b)*2 >= max(a,b)) cout << "YES\n";
-        else cout << "NO\n";
+        return i^u^v;
     }
+};
+edge es[mxN];
+int vis[mxN],lowlink[mxN],_time[mxN],_timer;
+bool cut[mxN];
+vector<int> adj[mxN];
+void dfs(int i, int p=-1) ///parent edge
+{
+    lowlink[i]=_time[i]=_timer++;
+    vis[i]=1;
+    for(int e:adj[i])
+    {
+        int j=es[e].other(i);
+        if(e==p||vis[j]==2) continue;
+        if(vis[j]) lowlink[i]=min(lowlink[i],_time[j]);
+        else
+        {
+            dfs(j,e);
+            lowlink[i]=min(lowlink[i],lowlink[j]);
+            if(lowlink[j]>_time[i]) cut[e]=1;
+        }
+    }
+    vis[i]=2;
 }
-
-//74 74 74
-
