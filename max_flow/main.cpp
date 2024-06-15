@@ -60,6 +60,23 @@ int main()
         mf+=f;
         if(mf==K) break; ///ogranicen K
     }
+
+    for(int e=0; e<sz; e+=2) ///maximum indepedent set / minimum node cover
+    {
+        if(es[e].a>0&&es[e].b<N-1)
+        {
+            if(!es[e].cap)
+            {
+                adj2[es[e].b].push_back(es[e].a);
+                mt[es[e].a]=1;
+            }
+            else adj2[es[e].a].push_back(es[e].b);
+        }
+    }
+    for(int i=1; i<=n; i++) if(!mt[i]) dfs2(i);
+    vector<pair<int,int>> ans;
+    for(int i=1; i<=n; i++) if(!vis2[i]) ans.push_back(i);
+    for(int i=1; i<=n; i++) if(vis2[i+n]) ans.push_back(i+n); ///minimum node cover
 }
 
 /**

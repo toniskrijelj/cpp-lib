@@ -1,9 +1,8 @@
 vector<int> who[mxN];
-int comp[mxN];
-bool pty[mxN];
-void unite(int u, int v)
+int comp[mxN], pty[mxN];
+void unite(int u, int v, int b) ///b parity of a edge
 {
-    bool b=pty[u]==pty[v];
+    b^=pty[u]^pty[v];
     u=comp[u],v=comp[v];
     if(who[u].size()>who[v].size()) swap(u,v);
     while(who[u].size())
@@ -24,5 +23,5 @@ void clear(int i)
 }
 void init(int n)
 {
-    for(int i = 0; i < n; i++) clear(i);
+    for(int i=0; i<n; i++) clear(i);
 }

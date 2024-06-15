@@ -1,74 +1,165 @@
-int sz;
-int mx[mxN];
-void recalc(int i, int Lx=0, int Rx=0)
+int sz, mn[mxN], tag[mxN];
+void recalc(int i)
 {
 
 }
-void build2(int n, int i=0, int Lx=0, int Rx=sz)
+void build2(int n, int i=1, int lx=0, int rx=sz)
 {
-    if(Rx-Lx==1)
+    if(rx-lx==1)
     {
-        if(Lx<n)
-        {
-
-        }
+        if(lx<n) ;
         return;
     }
-    int m = (Lx+Rx)/2;
-    build2(n, i*2+1, Lx, m);
-    build2(n, i*2+2, m, Rx);
-    recalc(i, Lx, Rx);
+    int m=lx+rx>>1;
+    build2(n,i<<1,lx,m);
+    build2(n,i<<1|1,m,rx);
+    recalc(i);
 }
 void build(int n)
 {
-    sz = 1;
-    while(sz < n) sz <<= 1;
+    sz=1;
+    while(sz<n) sz<<=1;
     build2(n);
 }
-void lazy(int i, int Lx=0, int Rx=0)
+void lazy(int i)
 {
-
-}
-void add(int l, int r, ll v, int i=0, int Lx=0, int Rx=sz)
-{
-    if(Rx <= l || Lx >= r) return;
-    if(Lx >= l && Rx <= r)
+    if(tag[i])
     {
-
+        mn[i<<1]+=tag[i];
+        tag[i<<1]+=tag[i];
+        mn[i<<1|1]+=tag[i];
+        tag[i<<1|1]+=tag[i];
+        tag[i]=0;
+    }
+}
+void upd(int l, int r, ll v, int i=1, int lx=0, int rx=sz)
+{
+    if(lx>=r || rx<=l) return;
+    if(lx>=l && rx<=r)
+    {
+        mn[i]+=v;
+        tag[i]+=v;
         return;
     }
-    int m = (Rx+Lx)/2;
-    lazy(i, Lx, Rx);
-    add(l, r, v, i*2+1, Lx, m);
-    add(l, r, v, i*2+2, m, Rx);
-    recalc(i, Lx, Rx);
+    int m=lx+rx>>1;
+    lazy(i);
+    upd(l,r,v,i<<1,lx,m);
+    upd(l,r,v,i<<1|1,m,rx);
+    recalc(i);
 }
-void SET(int pos, int v, int i=0, int Lx=0, int Rx=sz)
+void upd(int pos, int v, int i=1, int lx=0, int rx=sz)
 {
-    if(Rx-Lx==1)
+    if(rx-lx==1)
     {
         mn[i]=v;
         return;
     }
-    lazy(i, Lx, Rx);
-    int m = (Rx+Lx)/2;
-    if(pos<m) SET(pos,v,i*2+1,Lx,m);
-    else SET(pos,v,i*2+2,m,Rx);
-    recalc(i, Lx, Rx);
+    lazy(i);
+    int m=lx+rx>>1;
+    if(pos<m) upd(pos,v,i<<1,lx,m);
+    else upd(pos,v,i<<1|1,m,rx);
+    recalc(i);
 }
-ll qry(int l, int r, int i=0, int Lx=0, int Rx=sz)
+ll qry(int l, int r, int i=1, int lx=0, int rx=sz)
 {
-    if(Rx <= l || Lx >= r) return 1e9;
-    if(Lx >= l && Rx <= r) return 0;
-    lazy(i, Lx, Rx);
-    int m = (Rx+Lx)/2;
-    return qry(l,r,i*2+1,Lx,m), qry(l,r,i*2+2,m,Rx);
+    if(lx>=r || rx<=l) return 0;
+    if(lx>=l && rx<=r) return mn[i];
+    lazy(i);
+    int m=lx+rx>>1;
+    return qry(l,r,i<<1,lx,m) + qry(l,r,i<<1|1,m,rx);
 }
-ll qry(int pos, int i=0, int Lx=0, int Rx=sz)
+ll qry(int pos, int i=1, int lx=0, int rx=sz)
 {
-    if(Rx-Lx==1) return ;
-    lazy(i, Lx, Rx);
-    int m = (Rx+Lx)/2;
-    if(pos<m) return +qry(pos,i*2+1,Lx,m);
-    else return +qry(pos,i*2+2,m,Rx);
+    if(rx-lx==1) return 0;
+    lazy(i);
+    int m=lx+rx>>1;
+    if(pos<m) return qry(pos,i<<1,lx,m);
+    else return qry(pos,i<<1|1,m,rx);
 }
+
+/*
+https://codeforces.com/contest/1942/problem/F
+https://codeforces.com/contest/1936/problem/D
+
+ll qry(int p, int i=1, int lx=0, int rx=sz)
+{
+    if(rx-lx==1) return val[i];
+    lazy(i,lx,rx);
+    int m=lx+rx>>1;
+    if(lx>=p)
+    {
+        if(val[i]==rx-lx) return rx-lx;
+        if(val[i<<1]==(rx-lx)/2) return (rx-lx)/2+qry(p,i<<1|1,m,rx);
+        return qry(p,i<<1,lx,m);
+    }
+    if(p<m)
+    {
+        int res=qry(p,i<<1,lx,m);
+        if(res==m-p) return res+qry(p,i<<1|1,m,rx);
+        return res;
+    }
+    return qry(p,i<<1|1,m,rx);
+}
+
+int findr(int p, int v, int& x, int i=1, int lx=0, int rx=sz)
+{
+    if(rx-lx==1)
+    {
+        x|=orv[i];
+        if(x>=v) return rx;
+        return sz+1;
+    }
+    int m=lx+rx>>1;
+    if(lx>=p)
+    {
+        if((x|orv[i])<v)
+        {
+            x|=orv[i];
+            return sz+1;
+        }
+        if((x|orv[i<<1])>=v) return findr(p,v,x,i<<1,lx,m);
+        x|=orv[i<<1];
+        return findr(p,v,x,i<<1|1,m,rx);
+    }
+    else
+    {
+        if(p<m)
+        {
+            int p2=findr(p,v,x,i<<1,lx,m);
+            if(p2<=sz) return p2;
+        }
+        return findr(p,v,x,i<<1|1,m,rx);
+    }
+}
+int findl(int p, int v, int& x, int i=1, int lx=0, int rx=sz)
+{
+    //cout << "x " << x << " " << lx << " " << rx << "\n";
+    if(rx-lx==1)
+    {
+        x|=orv[i];
+        if(x>=v) return lx;
+        else return sz+1;
+    }
+    int m=lx+rx>>1;
+    if(rx<=p)
+    {
+        if((x|orv[i])<v)
+        {
+            x|=orv[i];
+            return sz+1;
+        }
+        if((x|orv[i<<1|1])>=v) return findl(p,v,x,i<<1|1,m,rx);
+        x|=orv[i<<1|1];
+        return findl(p,v,x,i<<1,lx,m);
+    }
+    else
+    {
+        if(p>m)
+        {
+            int p2=findl(p,v,x,i<<1|1,m,rx);
+            if(p2<=sz) return p2;
+        }
+        return findl(p,v,x,i<<1,lx,m);
+    }
+}
+*/

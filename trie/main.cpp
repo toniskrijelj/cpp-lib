@@ -1,8 +1,7 @@
 struct struct_trie
 {
     int mp[2];
-    bool complete;
-    int xr;
+    bool en;
     int& operator[](const int& i)
     {
         return mp[i];
@@ -10,40 +9,36 @@ struct struct_trie
     struct_trie()
     {
         mp[0]=mp[1]=-1;
-        complete = 0;
+        en=0;
     }
 };
 struct_trie tr[mxN*mxK];
-int sz = 1;
+int sz=1;
 void insert(int x)
 {
-    int t = 0;
+    int t=0;
     vector<int> vis;
-    for(int bit = mxK-1; bit >= 0; bit--)
+    for(int bit=mxK-1; bit>=0; bit--)
     {
-        bool b = x&(1<<bit);
-        if(tr[t][b]==-1) tr[t][b]=sz++;
+        bool b=x&(1<<bit);
+        if(!~tr[t][b]) tr[t][b]=sz++;
         vis.push_back(t);
-        t = tr[t][b];
+        t=tr[t][b];
     }
-    tr[t].complete = 1;
+    tr[t].en = 1;
     while(vis.size())
     {
-        t = vis.back(); vis.pop_back();
-        tr[t].complete =
-            tr[t][0]!=-1&&
-            tr[t][1]!=-1&&
-            tr[tr[t][0]].complete&&
-            tr[tr[t][1]].complete;
+        t=vis.back(); vis.pop_back();
+        tr[t].complete=~tr[t][0]&&~tr[t][1]&&tr[tr[t][0]].en&&tr[tr[t][1]].en;
     }
 }
 int find(int x)
 {
-    int t = 0, ans = 0, t2;
-    for(int bit = mxK-1; bit >= 0; bit--)
+    int t=0, ans=0, t2;
+    for(int bit=mxK-1; bit>=0; bit--)
     {
-        if(t==-1) break;
-        bool flip = x&(1<<bit);
+        if(!~t) break;
+        bool flip=x&(1<<bit);
         if(flip) swap(tr[t][0], tr[t][1]);
         if(tr[t][0]==-1 || !tr[tr[t][0]].complete) t2 = tr[t][0];
         else
@@ -55,4 +50,35 @@ int find(int x)
         t = t2;
     }
     return ans;
+}
+
+struct _trie
+{
+    int mp[2], cnt;
+    int& operator[](const int& i) { return mp[i]; }
+    _trie() { mp[0]=mp[1]=-1; cnt=0; }
+};
+_trie tr[mxN*K];
+int sz=2;
+void insert(int t, int x, int s)
+{
+    tr[t].cnt+=s;
+    for(int bit=K-1; bit>=0; bit--)
+    {
+        int b=x>>bit&1;
+        if(!~tr[t][b]) tr[t][b]=sz++;
+        t=tr[t][b];
+        tr[t].cnt+=s;
+    }
+}
+int find(int t, int x)
+{
+    for(int bit=K-1; bit>=0; bit--)
+    {
+        int b=x>>bit&1;
+        if(~tr[t][!b]&&tr[tr[t][!b]].cnt) t=tr[t][!b], x^=!b<<bit;
+        else if(~tr[t][b]&&tr[tr[t][b]].cnt) t=tr[t][b], x^=b<<bit;
+        else return 0;
+    }
+    return x;
 }

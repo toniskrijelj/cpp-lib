@@ -47,7 +47,7 @@ int main()
             int u=cur.second;
             if(vis[u]) continue;
             vis[u]=1;
-            for(int j : adj[u])
+            for(int j:adj[u])
             {
                 int v=es[j].b;
                 ll w=es[j].cost+pi[u]-pi[v];
@@ -59,7 +59,7 @@ int main()
                 }
             }
         }
-        if(p[N-1]==-1) break;
+        if(!~p[N-1]) break;
         int u=N-1;
         ll f=inf; ///k-mf
         while(u)

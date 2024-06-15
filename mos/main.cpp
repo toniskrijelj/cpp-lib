@@ -10,16 +10,16 @@ struct query
 vector<query> qrs[K];
 int a[mxN], b[mxN];
 int q; cin >> q;
-for(int i = 0; i < q; i++)
+for(int i=0; i<q; i++)
 {
     int l, r; cin >> l >> r;
     qrs[l/K].push_back({l,r,i});
 }
-for(int i = 0; i < K; i++)
+for(int i=0; i<K; i++)
 {
     sort(qrs[i].begin(), qrs[i].end());
     int L=K*(i+1)-1, R=K*(i+1);
-    for(auto q : qrs[i])
+    for(auto q:qrs[i])
     {
         int l=q.l,r=q.r;
         if(r<=L)
@@ -41,4 +41,4 @@ for(int i = 0; i < K; i++)
         }
     }
 }
-for(int i = 0; i < q; i++) cout << b[i] << "\n";
+for(int i=0; i<q; i++) cout << b[i] << "\n";

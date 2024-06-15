@@ -1,66 +1,54 @@
 struct trie_struct
 {
     int mp[2];
-    trie_struct()
-    {
-        clear();
-    }
-    void clear()
-    {
-        mp[0]=mp[1]=-1;
-    }
-    int& operator[](const int& i)
-    {
-        return mp[i];
-    }
+    trie_struct() { clear(); }
+    void clear() { mp[0]=mp[1]=-1; }
+    int& operator[](const int& i) { return mp[i]; }
 };
-const int bits=17;
-trie_struct tr[mxN*bits];
-
-int a[mxN];
-int sz = 1;
-void insert(int x, int t = 0)
+const int bits=18;
+trie_struct tr[mxN*mxB];
+int sz=1;
+void insert(int x, int t=0)
 {
-    for(int bit = 0; bit < bits; bit++)
+    for(int i=0; i<mxB; i++)
     {
-        bool b = x&(1<<(bits-1-bit));
-        if(tr[t][b]==-1) tr[t][b] = sz++, tr[tr[t][b]].clear();
-        t = tr[t][b];
+        bool b=x&(1<<(bits-1-i));
+        if(!~tr[t][b]) tr[t][b]=sz++;
+        t=tr[t][b];
     }
 }
 void reset()
 {
+    for(int i=0; i<sz; i++) tr[i].clear();
     sz=1;
-    tr[0].clear();
 }
-int mn(int x, int t = 0)
+int mn(int x, int t=0)
 {
-    int ans = 0;
-    for(int bit = 0; bit < bits; bit++)
+    int ans=0;
+    for(int i=0; i<mxB; i++)
     {
-        bool b = x&(1<<(bits-1-bit));
-        if(tr[t][b]==-1)
-        {
-            ans += 1<<(bits-1-bit);
-            t = tr[t][!b];
-        }
-    }
-}
-int mx(int x, int t = 0)
-{
-    int ans = 0;
-    for(int bit = 0; bit < bits; bit++)
-    {
-        bool b = !(x&(1<<(bits-1-bit)));
-        if(tr[t][b]==-1)
-        {
-            t = tr[t][!b];
-        }
+        bool b=x&(1<<(mxB-1-i));
+        if(~tr[t][b]) t=tr[t][b];
         else
         {
-            ans += 1<<(bits-1-bit);
-            t = tr[t][b];
+            ans+=1<<(mxB-1-i);
+            t=tr[t][!b];
         }
+    }
+    return ans;
+}
+int mx(int x, int t=0)
+{
+    int ans=0;
+    for(int i=0; i<mxB; i++)
+    {
+        bool b=!(x&(1<<(mxB-1-i)));
+        if(~tr[t][b])
+        {
+            t=tr[t][b];
+            ans+=1<<(bits-1-i);
+        }
+        else t=tr[t][!b];
     }
     return ans;
 }

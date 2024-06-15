@@ -107,3 +107,19 @@ void Z(string &s, vector<int> &z)
         }
     }
 }
+
+vector<int> manacher(string s)
+{
+    string t="#";
+    for(auto c:s) t+=c, t+="#";
+    int n=t.size();
+    vector<int> ans(n);
+    for(int i=0, j=0; i<n; i++)
+    {
+        if(2*j-i>=0 && j+ans[j]>i) ans[i]=min(ans[2*j-i], j+ans[j]-i);
+        while(i-ans[i]>=0 && i+ans[i]<n && t[i-ans[i]]==t[i+ans[i]]) ans[i]++;
+        if(i+ans[i] > j+ans[j]) j=i;
+    }
+    return ans;
+}
+//[l,r) substring : ans[l+r] >= r-l;

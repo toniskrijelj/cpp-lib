@@ -1,3 +1,4 @@
+///C(a,c)+C(b,d) <= C(a,d)+C(b,c)
 ll dp[mxN], dp2[mxN];
 ll cost(int l, int r)
 {
@@ -24,4 +25,12 @@ void solve(int l, int r, int optl, int optr)
     solve(l,m-1,optl,opt);
     solve(m+1,r,opt,optr);
 }
-///for(int i=1; i<=n; i++) dp[i]=
+/*
+for(int i=1; i<=n; i++) dp[i]=cost(0,i);
+while(--k)
+{
+    solve(1,n,1,n);
+    for(int i=1; i<=n; i++) dp[i]=dp2[i];
+}
+*/
+

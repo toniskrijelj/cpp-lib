@@ -1,4 +1,50 @@
+multiset<ll> ms;
+auto it=ms.end();
+ll sum=0, can=0;
+void add(ll x)
+{
+    if(can>ms.size())
+    {
+        ms.insert(x);
+        sum+=x;
+        it=ms.begin();
+    }
+    else
+    {
+        ms.insert(x);
+        if(it!=ms.end()&&x>=*it) sum+=-(*it++)+x;
+    }
+}
+void rem(ll x)
+{
+    if(it==ms.begin())
+    {
+        sum-=x;
+        ms.erase(ms.find(x));
+        it=ms.begin();
+    }
+    else
+    {
+        if(it!=ms.end()&&(*it<x||(*it==x&&*prev(it)!=x))) sum+=(*--it)-x;
+        ms.erase(ms.find(x));
+    }
+}
+void addnew()
+{
+    can++;
+    if(it!=ms.begin()) sum+=*--it;
+}
+void remnew()
+{
+    can--;
+    if(it!=ms.end()) sum-=*it++;
+}
 
+
+
+
+
+///old implementation, longer, stress tested
 multiset<ll> ms;
 auto it=ms.end();
 ll sum=0;
