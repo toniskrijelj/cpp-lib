@@ -123,3 +123,23 @@ vector<int> manacher(string s)
     return ans;
 }
 //[l,r) substring : ans[l+r] >= r-l;
+
+
+///https://oi-wiki.org/string/minimal-string/
+vector<int> min_cycle(vector<int> a)
+{
+    int k=0, i=0, j=1, n=a.size();
+    while(k<n&&i<n&&j<n)
+    {
+        if(a[(i+k)%n]==a[(j+k)%n]) k++;
+        else
+        {
+            a[(i+k)%n]>a[(j+k)%n]?i=i+k+1:j=j+k+1;
+            if(i==j) i++;
+            k=0;
+        }
+    }
+    i=min(i,j);
+    rotate(a.begin(),a.begin()+i,a.end());
+    return a;
+}

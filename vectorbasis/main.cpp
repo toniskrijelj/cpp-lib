@@ -1,20 +1,20 @@
-const int MAX_BITS=30;
-int basis[MAX_BITS], basis2[MAX_BITS];
+const int K=30;
+int bs[K], bs2[K];
 int sz;
 void insert(int x)
 {
     int y=x;
-    for(int i=0; i<MAX_BITS; i++)
+    for(int i=0; i<K; i++)
     {
-        if(!(x&(1<<i))) continue;
-        if(!basis[i])
+        if(!(x>>i&1)) continue;
+        if(!bs[i])
         {
             sz++;
-            basis[i]=x;
-            basis2[i]=y;
+            bs[i]=x;
+            bs2[i]=y;
             return;
         }
-        x^=basis[i];
+        x^=bs[i];
     }
 }
 ///gray code i^(i>>1)

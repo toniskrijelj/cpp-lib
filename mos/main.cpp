@@ -1,4 +1,4 @@
-
+///https://codeforces.com/contest/2006/submission/322855304
 struct query
 {
     int l,r,i;

@@ -76,7 +76,27 @@ ll qry(int pos, int i=1, int lx=0, int rx=sz)
     if(pos<m) return qry(pos,i<<1,lx,m);
     else return qry(pos,i<<1|1,m,rx);
 }
-
+// https://atcoder.jp/contests/abc365/submissions/56462288 clamp segment tree
+/*
+struct block
+{
+    ll fL, fU, gL, gU, C;
+    pair<ll,ll> operator()(ll y) const
+    {
+        return {clamp(y,fL,fU),C+max(y,gL)-min(y,gU)};
+    }
+};
+block op(block a, block b)
+{
+    ll fL=clamp(a.fL,b.fL,b.fU), fU=clamp(a.fU,b.fL,b.fU);
+    ll gL=clamp(b.gL,a.gL,a.gU), gU=clamp(b.gU,a.gL,a.gU);
+    ll C=a.C+b(a(gU).first).second;
+    return {fL,fU,gL,gU,C};
+}
+block e()
+{
+    return {0,inf,0,inf,0};
+}*/
 /*
 https://codeforces.com/contest/1942/problem/F
 https://codeforces.com/contest/1936/problem/D

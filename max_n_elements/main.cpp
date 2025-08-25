@@ -1,3 +1,55 @@
+struct max_n_elements
+{
+    private:
+        multiset<ll> ms;
+        multiset<ll>::iterator it;
+        ll sum=0, sz=0;
+    public:
+        max_n_elements() { clear(); }
+        max_n_elements(int n) { clear(); set_size(n); }
+        void clear()
+        {
+            sum=sz=0;
+            ms.clear();
+            it=ms.end();
+        }
+        void insert(ll x)
+        {
+            if(sz>(int)ms.size())
+            {
+                ms.insert(x);
+                sum+=x;
+                it=ms.begin();
+            }
+            else
+            {
+                ms.insert(x);
+                if(it!=ms.end()&&x>=*it) sum+=-(*it++)+x;
+            }
+        }
+        void remove(ll x)
+        {
+            if(it==ms.begin())
+            {
+                sum-=x;
+                ms.erase(ms.find(x));
+                it=ms.begin();
+            }
+            else
+            {
+                if(it!=ms.end()&&(*it<x||(*it==x&&*prev(it)!=x))) sum+=(*--it)-x;
+                ms.erase(ms.find(x));
+            }
+        }
+        void set_size(int n)
+        {
+            while(sz<n) { sz++; if(it!=ms.begin()) sum+=*--it; };
+            while(sz>n) { sz--; if(it!=ms.end()) sum-=*it++; };
+        }
+        ll get() { return sum; }
+};
+
+
 multiset<ll> ms;
 auto it=ms.end();
 ll sum=0, can=0;

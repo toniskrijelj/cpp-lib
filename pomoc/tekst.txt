@@ -1,0 +1,5 @@
+https://atcoder.jp/contests/abc376/tasks/abc376_g
+https://atcoder.jp/contests/agc023/tasks/agc023_f
+kada u drvetu dodajes dete jedno po jedno i racunas neki minimum
+
+clique je idempendent set u complement grafu

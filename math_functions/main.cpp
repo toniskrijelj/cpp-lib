@@ -26,7 +26,41 @@ ll chose(ll a, ll b)
     finv[mxN-1]=inv(f[mxN-1]);
     for(int i=mxN-2; i>=0; i--) finv[i]=finv[i+1]*(i+1)%mod;
 
+using mint=modint998244353;
+mint f[mxN], finv[mxN];
+mint powb(ll a, ll b)
+{
+    return mint(a).pow(b);
+}
+mint inv(ll a)
+{
+    return mint(a).inv();
+}
+mint chose(ll a, ll b)
+{
+    if(a<0||a>b) return 0;
+    return f[b]*finv[a]*finv[b-a];
+}
+    f[0]=1;
+    for(int i=1; i<mxN; i++) f[i]=f[i-1]*i;
+    finv[mxN-1]=f[mxN-1].inv();
+    for(int i=mxN-2; i>=0; i--) finv[i]=finv[i+1]*(i+1);
 
+catalan() f[2*n]*finv[n]*finv[n+1]
+struct chs
+{
+    int lp=0, rp=0, np=0; ll ansp=1;
+    ll ch(int l, int r, int n)
+    {
+        while(l<lp) ansp=(ansp+chose(--lp,np))%mod;
+        while(l>lp) ansp=(ansp-chose(lp++,np)+mod)%mod;
+        while(r<rp) ansp=(ansp-chose(rp--,np)+mod)%mod;
+        while(r>rp) ansp=(ansp+chose(++rp,np))%mod;
+        while(n>np) ansp=(ansp*2-chose(lp,np)+mod-chose(rp,np)+mod+chose(lp,np+1))%mod, np++;
+        while(n<np) ansp=(ansp+chose(lp,np-1)+chose(rp,np-1)-chose(lp,np)+mod)%mod*inv2%mod, np--;
+        return ansp;
+    }
+};
 
 bool prime(int x)
 {
@@ -113,3 +147,18 @@ ll gcd(ll a, ll b, ll& x, ll& y)
 /// all in form
 ///(a-ky/d, b+kx/d), ax+by=gcd
 #pragma GCC target("popcnt")
+
+//stars and bars limited
+ll g(ll x, ll n, ll m) //a1+..+an=m, ai<=x O(m/x)
+{
+    if(m<0||x<0||n<0||x*n<m) return 0;
+    ll ans=0;
+    for(int k=0; k<=m/(x+1); k++)
+    {
+        ll mul=1;
+        if(k&1) mul=-1;
+        ans+=mul*chose(k,n)*chose(n-1,m-k*(x+1)+n-1);
+        ans=(ans%mod+mod)%mod;
+    }
+    return ans;
+}

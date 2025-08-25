@@ -1,5 +1,4 @@
-int root[mxN];
-bool vis[mxN];
+int root[mxN], vis[mxN];
 vector<int> out[mxN],in[mxN],order;
 void dfs(int i)
 {
@@ -50,6 +49,31 @@ int setup(int n)
     }
     for(int i=0; i<comps; i++)
     {
+        outc[i].erase(unique(outc[i].begin(), outc[i].end()), outc[i].end());
+        inc[i].erase(unique(inc[i].begin(), inc[i].end()), inc[i].end());
+    }
+    return comps;
+}
+int setup(int n)
+{
+    for(int i=0; i<n; i++) vis[i]=0,root[i]=-1;
+    for(int i=0; i<n; i++) dfs(i);
+    reverse(order.begin(), order.end());
+    int comps=0;
+    for(int i:order)
+    {
+        if(~root[i]) continue;
+        assign(i,comps++);
+    }
+    for(int i=0; i<n; i++) for(int j:out[i]) if(root[i]!=root[j])
+    {
+        outc[root[i]].push_back(root[j]);
+        inc[root[j]].push_back(root[i]);
+    }
+    for(int i=0; i<comps; i++)
+    {
+        sort(outc[i].begin(),outc[i].end());
+        sort(inc[i].begin(),inc[i].end());
         outc[i].erase(unique(outc[i].begin(), outc[i].end()), outc[i].end());
         inc[i].erase(unique(inc[i].begin(), inc[i].end()), inc[i].end());
     }

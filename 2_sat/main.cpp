@@ -1,4 +1,4 @@
-
+///https://cses.fi/problemset/result/4163251/
 int root[mxN];
 bool vis[mxN];
 vector<int> out[mxN],in[mxN],order;
@@ -6,14 +6,14 @@ void dfs(int i)
 {
     if(vis[i]) return;
     vis[i]=1;
-    for(int j : out[i]) dfs(j);
+    for(int j:out[i]) dfs(j);
     order.push_back(i);
 }
 void assign(int i, int r)
 {
     if(~root[i]) return;
     root[i]=r;
-    for(int j : in[i]) assign(j, r);
+    for(int j:in[i]) assign(j, r);
 }
 void setup(int n)
 {

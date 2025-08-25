@@ -1,3 +1,4 @@
+//trazi max, ako zelis min, uradi -k -n i rezultat -
 struct Line {
 	mutable ll k, m, p;
 	bool operator<(const Line& o) const { return k < o.k; }
